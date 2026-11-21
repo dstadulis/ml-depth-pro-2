@@ -65,6 +65,24 @@ The app tells you when it holds more than half of the Mac's memory.
   fix it with `--min-depth` and `--max-depth`.
 - Press f to estimate the focal length again, when the field-of-view package is next to the model.
 
+### Using an iPhone as video input (Continuity Camera)
+
+Unlike the Mac's built-in camera, an iPhone connected via Continuity Camera does not report its
+focal length to AVFoundation. Export the field-of-view estimator alongside the depth package so the
+app can estimate it:
+
+```bash
+uv run --extra coreml python -m demo.export stream -m depthpro2-s -w 4
+uv run --extra coreml python -m demo.export fov
+./demo/run.sh depthpro2-s_480x854_w4.mlpackage
+```
+
+The app loads `depthpro2-fov_512x896.mlpackage` automatically when it is in the same folder as the
+depth package; alternatively, pass `--focal-px PIXELS` to supply a focal length directly without
+exporting the field-of-view package. Once the window opens, select the iPhone in the camera menu at
+the bottom left. Press `f` to re-estimate the focal length from the current scene after switching or
+repositioning the camera, and `c` to recalibrate the color bar.
+
 ## Use the exported model in your own app
 
 The exported model needs macOS 15 or later.
